@@ -1,8 +1,9 @@
-﻿using Microsoft.Identity.Client;
+﻿using Iot.Device.Hcsr04;
+using Microsoft.Identity.Client;
 using System;
 using System.Device.Gpio;
 using System.Threading;
-
+using UnitsNet;
 
 Console.WriteLine("Hello World!");
 Console.WriteLine("Blinking LED. Press Ctrl+C to end.");
@@ -35,7 +36,21 @@ try
         }
         //maybe add conditions for down
 
-        
+        using (var sonar = new Hcsr04(23, 24))
+        {
+            if (sonar.TryGetDistance(out Length distance))
+            {
+                Console.WriteLine($"Distance: {distance.Centimeters} cm");
+            }
+            else
+            {
+                Console.WriteLine("Error reading sensor");
+            }
+
+            Thread.Sleep(1000);
+        }
+
+
         Thread.Sleep(sleepTime);
 
     }
